@@ -3,7 +3,7 @@
 Summary:	An options parser for the Java programming language
 Name:		ritopt
 Version:	0.2.1
-Release:	0
+Release:	1
 License:	GPL
 Group:		Development/Java
 URL:		http://ritopt.sourceforge.net/
@@ -14,10 +14,7 @@ BuildArch:	noarch
 BuildRequires:	jpackage-utils
 BuildRequires:	java-devel
 BuildRequires:	ant
-BuildRequires:	texlive-latex
-
-Requires:	jpackage-utils
-Requires:	java-headless
+BuildRequires:	texlive
 
 %description
 Ritopt is an options parser for the Java programming language
