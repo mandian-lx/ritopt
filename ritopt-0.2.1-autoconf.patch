@@ -1,0 +1,64 @@
+--- ritopt-0.2.1/configure.in.orig
++++ ritopt-0.2.1/configure.in
+@@ -1,7 +1,5 @@
+-AC_INIT(java/gnu/dtools/ritopt/Option.java)
+-
+-PACKAGE="ritopt"
+-VERSION="0.1"
++PACKAGE="@PACKAGE@"
++VERSION="@VERSION@"
+ 
+ AC_SUBST(PACKAGE)
+ AC_SUBST(VERSION)
+@@ -30,7 +28,10 @@
+ echo 'For additional instructions, consult the README file.'
+ echo ''
+ 
+-AM_INIT_AUTOMAKE(${PACKAGE}, ${VERSION})
++AC_INIT([@PACKAGE@], [@VERSION@])
++AC_CONFIG_SRCDIR([java/gnu/dtools/ritopt/Option.java])
++AM_INIT_AUTOMAKE
++
+ AC_PROG_MAKE_SET
+ AC_PREFIX_DEFAULT(/usr/${CONFIG_GUESS})
+ 
+--- ritopt-0.2.1/java/Makefile.am.orig
++++ ritopt-0.2.1/java/Makefile.am
+@@ -3,17 +3,18 @@
+ ritopt_jar = ${PACKAGE}.jar
+ javafiles = gnu/dtools/ritopt/*.java gnu/dtools/ritopt/test/*.java
+ 
+-javadoc_product = $(ls ${javafiles} | sed -e 's/\.java/\.html/g' -e 's/gnu\//doc\/gnu\//g')
++javadoc_product = $(ls ${javafiles} | sed -e 's/\.java/\.html/g' -e 's/gnu\//doc\/gnu\//g' | grep -v '/test/')
+ 
+ blah = `echo ${javadoc_product}`
+ 
+-pkgsrcdir = ${pkglibdir}/../doc
+-pkglib_DATA = ${ritopt_jar}
+-pkgsrc_DATA = ${javadoc_product}
++pkgsrcdir = /usr/share/javadoc
++my_pkgdatadir = /usr/share/java/
++my_pkgdata_DATA = ${ritopt_jar}
++pkgsrc_DATA = ritopt_javadoc
+ 
+ MOSTLYCLEANFILES = ${ritopt_jar}
+ 
+-classfiles = gnu/dtools/ritopt/*.class gnu/dtools/ritopt/test/*.class
++classfiles = gnu/dtools/ritopt/*.class #gnu/dtools/ritopt/test/*.class
+ 
+ javadocfiles = ${javafiles}
+ javadocroot = doc
+@@ -25,7 +26,12 @@
+ 
+ ${ritopt_jar}: ${classfiles}
+ 	@JAR@ -cvf ${ritopt_jar} ${classfiles}
++	touch ritopt_javadoc
+ 
+-${javadoc_product}:
++ritopt_javadoc:
+ 	@JAVADOC@ -d ${javadocroot} -windowtitle ${windowtitle} -footer ${footer} -header ${header} ${javadocfiles}
+ 
++${javadoc_product}: ritopt_javadoc
++
++.PHONY: ritopt_javadoc
++
